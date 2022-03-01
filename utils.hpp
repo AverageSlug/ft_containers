@@ -5,6 +5,18 @@
 
 namespace ft
 {
+	/******************************************************/
+	/* _____ _   _ _   _  ___ _____ _____  ___  _   _  _, */
+	/* |     |   | |\  | |      |     |   |   | |\  | |   */
+	/* |---  |   | | \ | |      |     |   |   | | \ | '-. */
+	/* |     |___| |  \| |___   |   __|__ |___| |  \| ,_| */
+	/******************************************************/
+
+
+	/***************************/
+	/* ENABLE IF & IS_INTEGRAL */
+	/***************************/
+
 	template<bool Cond, class T = void> struct	enable_if;
 	template<class T> struct enable_if<true, T>
 	{
@@ -38,6 +50,10 @@ namespace ft
 	template<> struct							is_integral_type<unsigned long int> : public integral_constant<unsigned long int, true> {};
 
 	template<typename T> struct					is_integral : public is_integral_type<T> {};
+
+	/***********************************/
+	/* EQUAL & LEXICOGRAPHICAL_COMPARE */
+	/***********************************/
 
 	template<class InputIterator1, class InputIterator2> bool							equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
 	{
@@ -91,7 +107,93 @@ namespace ft
 		return (first2 != last2);
 	}
 
-	struct													random_access_iterator_tag {};
+	/********************/
+	/* PAIR & MAKE_PAIR */
+	/********************/
+
+	template<class T1, class T2> struct			pair
+	{
+		public:
+			/*MEMBER TYPES*/
+			typedef T1							first_type;
+			typedef T2							second_type;
+
+			/*MEMBER VARIABLES*/
+			first_type							first;
+			second_type							second;
+
+			/*MEMBER FUNCTIONS*/
+			pair()
+			{
+				first = first_type();
+				second = second_type();
+			}
+
+			template<class U, class V>			pair(const pair<U,V>& pr)
+			{
+				first = first_type(pr.first);
+				second = second_type(pr.second);
+			}
+
+			pair(const first_type& a, const second_type& b)
+			{
+				first = first_type(a);
+				second = second_type(b);
+			}
+
+			pair&								operator=(const pair& pr)
+			{
+				first = pr.first;
+				second = pr.second;
+			}
+	};
+	/*NON-MEMBER FUNCTION OVERLOADS*/
+	template<class T1, class T2> bool			operator==(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	{
+		return (lhs.first == rhs.first && lhs.second == lhs.second);
+	}
+
+	template<class T1, class T2> bool			operator!=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	{
+		return (!(lhs == rhs));
+	}
+
+	template<class T1, class T2> bool			operator<(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	{
+		return (lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second));
+	}
+
+	template<class T1, class T2> bool			operator<=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	{
+		return (!(rhs < lhs));
+	}
+
+	template<class T1, class T2> bool			operator>(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	{
+		return (rhs < lhs);
+	}
+
+	template<class T1, class T2> bool			operator>=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	{
+		return (!(lhs < rhs));
+	}
+
+	template<class T1, class T2> pair<T1,T2>	make_pair(T1 x, T2 y)
+	{
+		return (pair<T1,T2>(x, y));
+	}
+
+	/******************************************************/
+	/* _____ _____ ____ ____   ___  _____  ___  ____   _, */
+	/*   |     |   |    |   \ |   |   |   |   | |   \ |   */
+	/*   |     |   |--  |---' |---|   |   |   | |---' '-. */
+	/* __|__   |   |___ |   \ |   |   |   |___| |   \ ,_| */
+	/******************************************************/
+
+
+	/*******************/
+	/* ITERATOR TRAITS */
+	/*******************/
 
 	template<class Iterator> struct							iterator_traits
 	{
@@ -110,7 +212,7 @@ namespace ft
 			typedef T										value_type;
 			typedef T*										pointer;
 			typedef T&										reference;
-			typedef ft::random_access_iterator_tag			iterator_category;
+			typedef std::random_access_iterator_tag			iterator_category;
 	};
 
 	template<class T> struct								iterator_traits<const T*>
@@ -120,27 +222,56 @@ namespace ft
 			typedef T										value_type;
 			typedef const T*								pointer;
 			typedef const T&								reference;
-			typedef ft::random_access_iterator_tag			iterator_category;
+			typedef std::random_access_iterator_tag			iterator_category;
 	};
 
-	template<class Iterator> class 									reverse_iterator
+	/********************/
+	/* REVERSE ITERATOR */
+	/********************/
+
+	template<class Iterator> class 											reverse_iterator
 	{
 		public:
-			//MEMBER TYPES
-			typedef Iterator										iterator_type;
+			/*MEMBER TYPES*/
+			typedef Iterator												iterator_type;
 			typedef typename iterator_traits<Iterator>::iterator_category	iterator_category;
 			typedef typename iterator_traits<Iterator>::value_type			value_type;
 			typedef typename iterator_traits<Iterator>::difference_type		difference_type;
 			typedef typename iterator_traits<Iterator>::pointer				pointer;
 			typedef typename iterator_traits<Iterator>::reference			reference;
 
-			//MEMBER FUNCTIONS
-			reverse_iterator();
-			explicit												reverse_iterator(iterator_type it);
-			template <class Iter>									reverse_iterator(const reverse_iterator<Iter>& rev_it);
-			iterator_type											base() const;
-			reference												operator*() const;
-			reverse_iterator										operator+(difference_type n) const;
+			/*MEMBER FUNCTIONS*/
+			reverse_iterator()
+			{
+				base_iterator = iterator_type();
+			}
+
+			explicit												reverse_iterator(iterator_type it)
+			{
+				reverse_iterator = iterator_type(it);
+				base_iterator = iterator_type(it);
+			}
+
+			template <class Iter>									reverse_iterator(const reverse_iterator<Iter>& rev_it)
+			{
+				reverse_iterator = iterator_type(rev_it.reverse_iterator);
+				base_iterator = iterator_type(rev_it.base_iterator);
+			}
+
+			iterator_type											base() const
+			{
+				return (base_iterator);
+			}
+
+			reference												operator*() const
+			{
+				return (*reverse_iar);
+			}
+
+			reverse_iterator										operator+(difference_type n) const
+			{
+			}
+
 			reverse_iterator&										operator++();
 			reverse_iterator										operator++(int);
 			reverse_iterator&										operator+=(difference_type n);
@@ -150,8 +281,11 @@ namespace ft
 			reverse_iterator&										operator-=(difference_type n);
 			pointer													operator->() const;
 			reference												operator[](difference_type n) const;
+		private:
+			iterator_type											reverse_iar;
+			iterator_type											base_iterator;
 	};
-	//NON-MEMBER FUNCTION OVERLOADS
+	/*NON-MEMBER FUNCTION OVERLOADS*/
 	template<class Iterator> bool													operator==(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs);
 	template<class Iterator> bool													operator!=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs);
 	template<class Iterator> bool													operator<(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs);
@@ -160,36 +294,6 @@ namespace ft
 	template<class Iterator> bool													operator>=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs);
 	template<class Iterator> reverse_iterator<Iterator>								operator+(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& rev_it);
 	template<class Iterator> typename reverse_iterator<Iterator>::difference_type	operator-(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs);
-
-	template<class T1, class T2> struct			pair
-	{
-		public:
-			//MEMBER TYPES
-			typedef T1							first_type;
-			typedef T2							second_type;
-
-			//MEMBER VARIABLES
-			first_type							first;
-			second_type							second;
-
-			//MEMBER FUNCTIONS
-			pair();
-			template<class U, class V>			pair(const pair<U,V>& pr);
-			pair(const first_type& a, const second_type& b);
-			pair&								operator=(const pair& pr);
-	};
-	//NON-MEMBER FUNCTION OVERLOADS
-	template<class T1, class T2> bool			operator==(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs);
-	template<class T1, class T2> bool			operator!=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs);
-	template<class T1, class T2> bool			operator<(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs);
-	template<class T1, class T2> bool			operator<=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs);
-	template<class T1, class T2> bool			operator>(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs);
-	template<class T1, class T2> bool			operator>=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs);
-
-	template<class T1, class T2> pair<T1,T2>	make_pair(T1 x, T2 y)
-	{
-		return (pair<T1,T2>(x, y));
-	}
 }
 
 #endif

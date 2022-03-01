@@ -2,6 +2,7 @@
 # define VECTOR_HPP
 
 # include <memory>
+# include <iterator>
 # include "utils.hpp"
 
 namespace ft
@@ -9,21 +10,21 @@ namespace ft
 	template<class T, class Alloc = std::allocator<T> > class	vector
 	{
 		public:
-			//MEMBER TYPES
+			/*MEMBER TYPES*/
 			typedef T														value_type;
 			typedef Alloc													allocator_type;
 			typedef typename allocator_type::reference						reference;
 			typedef typename allocator_type::const_reference				const_reference;
 			typedef typename allocator_type::pointer						pointer;
 			typedef typename allocator_type::const_pointer					const_pointer;
-			typedef	a														iterator;				//todo
-			typedef b														const_iterator;			//todo
+			typedef	std::iterator<std::random_access_iterator_tag, value_type>			iterator;
+			typedef std::iterator<const std::random_access_iterator_tag, value_type>	const_iterator;
 			typedef ft::reverse_iterator<iterator>							reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
-			typedef	typename ft::iterator_traits<iterator>::difference_type	difference_type;
+			typedef typename ft::iterator_traits<iterator>::difference_type			difference_type;
 			typedef typename allocator_type::size_type						size_type;
 
-			//MEMBER FUNCTIONS
+			/*MEMBER FUNCTIONS*/
 			explicit								vector(const allocator_type& alloc = allocator_type());
 			explicit								vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 			template <class InputIterator>			vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
@@ -31,7 +32,7 @@ namespace ft
 			~vector();
 			vector&									operator=(const vector& x);
 
-			//iterators
+			/*iterators*/
 			iterator								begin();
 			const_iterator							begin() const;
 			iterator								end();
@@ -41,7 +42,7 @@ namespace ft
 			reverse_iterator						rend();
 			const_reverse_iterator					rend() const;
 
-			//capacity
+			/*capacity*/
 			size_type								size() const;
 			size_type								max_size() const;
 			void									resize(size_type n, value_type val = value_type());
@@ -49,7 +50,7 @@ namespace ft
 			bool									empty() const;
 			void									reserve(size_type n);
 
-			//element access
+			/*element access*/
 			reference								operator[](size_type n);
 			const_reference							operator[](size_type n) const;
 			reference								at(size_type n);
@@ -59,7 +60,7 @@ namespace ft
 			reference								back();
 			const_reference							back() const;
 
-			//modifiers
+			/*modifiers*/
 			template <class InputIterator> void		assign(InputIterator first, InputIterator last);
 			void									assign (size_type n, const value_type& val);
 			void									push_back(const value_type& val);
@@ -72,17 +73,17 @@ namespace ft
 			void									swap(vector& x);
 			void									clear();
 
-			//allocator
+			/*allocator*/
 			allocator_type							get_allocator() const;
 	};
-	//NON-MEMBER FUNCTION OVERLOADS
+	/*NON-MEMBER FUNCTION OVERLOADS*/
 	template<class T, class Alloc> bool				operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	template<class T, class Alloc> bool				operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	template<class T, class Alloc> bool				operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	template<class T, class Alloc> bool				operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	template<class T, class Alloc> bool				operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	template<class T, class Alloc> bool				operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	template<class T, class Alloc>	void			swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
+	template<class T, class Alloc> void				swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
 }
 
 #endif
