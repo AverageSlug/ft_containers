@@ -113,11 +113,12 @@ namespace ft
 
 	template<class T1, class T2> struct			pair
 	{
-		public:
+		private:
 			/*MEMBER TYPES*/
 			typedef T1							first_type;
 			typedef T2							second_type;
 
+		public:
 			/*MEMBER VARIABLES*/
 			first_type							first;
 			second_type							second;
@@ -241,37 +242,12 @@ namespace ft
 			typedef typename iterator_traits<Iterator>::reference			reference;
 
 			/*MEMBER FUNCTIONS*/
-			reverse_iterator()
-			{
-				base_iterator = iterator_type();
-			}
-
-			explicit												reverse_iterator(iterator_type it)
-			{
-				reverse_iterator = iterator_type(it);
-				base_iterator = iterator_type(it);
-			}
-
-			template <class Iter>									reverse_iterator(const reverse_iterator<Iter>& rev_it)
-			{
-				reverse_iterator = iterator_type(rev_it.reverse_iterator);
-				base_iterator = iterator_type(rev_it.base_iterator);
-			}
-
-			iterator_type											base() const
-			{
-				return (base_iterator);
-			}
-
-			reference												operator*() const
-			{
-				return (*reverse_iar);
-			}
-
-			reverse_iterator										operator+(difference_type n) const
-			{
-			}
-
+			reverse_iterator();
+			explicit												reverse_iterator(iterator_type it);
+			template <class Iter>									reverse_iterator(const reverse_iterator<Iter>& rev_it);
+			iterator_type											base() const;
+			reference												operator*() const;
+			reverse_iterator										operator+(difference_type n) const;
 			reverse_iterator&										operator++();
 			reverse_iterator										operator++(int);
 			reverse_iterator&										operator+=(difference_type n);
@@ -281,9 +257,6 @@ namespace ft
 			reverse_iterator&										operator-=(difference_type n);
 			pointer													operator->() const;
 			reference												operator[](difference_type n) const;
-		private:
-			iterator_type											reverse_iar;
-			iterator_type											base_iterator;
 	};
 	/*NON-MEMBER FUNCTION OVERLOADS*/
 	template<class Iterator> bool													operator==(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs);
