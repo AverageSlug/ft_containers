@@ -113,12 +113,11 @@ namespace ft
 
 	template<class T1, class T2> struct			pair
 	{
-		private:
+		public:
 			/*MEMBER TYPES*/
 			typedef T1							first_type;
 			typedef T2							second_type;
 
-		public:
 			/*MEMBER VARIABLES*/
 			first_type							first;
 			second_type							second;
@@ -226,6 +225,154 @@ namespace ft
 			typedef std::random_access_iterator_tag			iterator_category;
 	};
 
+	/*******************/
+	/* VECTOR ITERATOR */
+	/*******************/
+
+	template<typename T> class											vector_iterator : public std::iterator<std::random_access_iterator_tag, T>
+	{
+		public:
+			/*MEMBER TYPES*/
+			typedef typename std::iterator<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
+			typedef typename std::iterator<std::random_access_iterator_tag, T>::value_type			value_type;
+			typedef typename std::iterator<std::random_access_iterator_tag, T>::difference_type		difference_type;
+			typedef T*																				pointer;
+			typedef T&																				reference;
+
+		private:
+			/*variables*/
+			pointer	_it;
+
+		public:
+			/*MEMBER FUNCTIONS*/
+			vector_iterator() :
+				_it(nullptr)
+			{}
+
+			vector_iterator(pointer it) :
+				_it(it)
+			{}
+
+			vector_iterator(const vector_iterator& vec_it) :
+				_it(vec_it._it)
+			{}
+
+			vector_iterator&			operator=(const vector_iterator& vec_it)
+			{
+				_it = vec_it._it;
+				return (*this);
+			}
+
+			virtual ~vector_iterator() {}
+
+			pointer						base() const
+			{
+				return (_it);
+			}
+
+			reference					operator*() const
+			{
+				return (*_it);
+			}
+
+			pointer						operator->()
+			{
+				return &(operator*());
+			}
+
+			vector_iterator				operator+(difference_type n) const
+			{
+				return (_it + n);
+			}
+
+			vector_iterator&			operator++()
+			{
+				_it++;
+				return (*this);
+			}
+
+			vector_iterator				operator++(int)
+			{
+				vector_iterator	t(*this);
+				operator++();
+				return (t);
+			}
+
+			vector_iterator&			operator+=(difference_type n)
+			{
+				_it += n;
+				return (*this);
+			}
+
+			vector_iterator				operator-(difference_type n) const
+			{
+				return (_it - n);
+			}
+
+			vector_iterator&			operator--()
+			{
+				_it--;
+				return (*this);
+			}
+
+			vector_iterator 			operator--(int)
+			{
+				vector_iterator	t(*this);
+				operator++();
+				return (t);
+			}
+
+			vector_iterator&			operator-=(difference_type n)
+			{
+				_it - n;
+				return (*this);
+			}
+
+			reference					operator[](difference_type n) const
+			{
+				return (*(operator+(n)));
+			}
+	};
+	/*NON-MEMBER FUNCTION OVERLOADS*/
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator==(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() == rhs.base());
+	}
+
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator!=(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() != rhs.base());
+	}
+
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator<(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() < rhs.base());
+	}
+
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator<=(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() <= rhs.base());
+	}
+
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator>(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() > rhs.base());
+	}
+
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator>=(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() >= rhs.base());
+	}
+
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator+(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() + rhs.base());
+	}
+
+	template<typename T> typename ft::vector_iterator<T>::difference_type	operator-(const ft::vector_iterator<T> lhs, const ft::vector_iterator<T> rhs)
+	{
+		return (lhs.base() - rhs.base());
+	}
 	/********************/
 	/* REVERSE ITERATOR */
 	/********************/
