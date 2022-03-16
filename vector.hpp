@@ -154,7 +154,7 @@ namespace ft
 			{
 				if (n <= size())
 					while (n < size())
-						erase(n);
+						erase(_begin + n);
 				else
 				{
 					reserve(n);

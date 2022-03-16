@@ -2,9 +2,9 @@ NAME		=	ft_containers
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -pedantic
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 
-SRCS		=	$(wildcard *.cpp)
+SRCS		=	$(wildcard *.cpp testers/*.cpp)
 
 OBJS		=	$(SRCS:.cpp=.o)
 
