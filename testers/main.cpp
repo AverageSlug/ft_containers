@@ -103,16 +103,16 @@ int main(int argc, char **argv)
 
 	if (test == "all")
 	{
-		test_stack();
+//		test_stack();
 		test_vector();
-		test_map();
+//		test_map();
 	}
-	else if (test == "stack")
-		test_stack();
+	// else if (test == "stack")
+	// 	test_stack();
 	else if (test == "vector")
 		test_vector();
-	else if (test == "map")
-		test_map();
+	// else if (test == "map")
+	// 	test_map();
 	else
 	{
 		print_error();

@@ -90,15 +90,15 @@ void	test_vct_construct()
 	basic_val(my2, real2);
 	ft::vector<int> my3(my2.begin(), my2.end());
 	std::vector<int> real3(real2.begin(), real2.end());
-	check("Constructor range", (my3 == real3));	
+	check("Constructor range", (my3 == real3));
 
 	ft::vector<int> my4(my3);
 	std::vector<int> real4(real3);
-	check("Constructor copy", (my4 == real4));	
+	check("Constructor copy", (my4 == real4));
 
 	ft::vector<int> my5 = my4;
 	std::vector<int> real5 = real4;
-	check("Constructor =", (my5 == real5));	
+	check("Constructor =", (my5 == real5));
 
 	my5 = my3;
 	real5 = real3;
@@ -133,7 +133,7 @@ void	test_vct_iterators()
 	myIt = my1.begin();
 	realIt = real1.begin();
 	check("Iterator +", *(myIt + 2), *(realIt + 2));
-	check("Iterator -", *(my1.end() - 3), *(real1.end() - 3));	
+	check("Iterator -", *(my1.end() - 3), *(real1.end() - 3));
 
 	ft::vector<int> my2;
 	std::vector<int> real2;
@@ -144,7 +144,7 @@ void	test_vct_iterators()
 		check("Iterator reverse empty", check_it_rev(myIt2, my2.rend(), realIt2));
 	else
 		check("Container empty", false); //Print error
-	
+
 	basic_val(my2, real2);
 	myIt2 = my2.rbegin();
 	realIt2 = real2.rbegin();
@@ -347,7 +347,7 @@ void	test_vct_insert()
 
 	my2.insert(my2.begin(), (size_t)3, 19);
 	real2.insert(real2.begin(), (size_t)3, 19);
-	check("Insert fill", (my2 == real2));	
+	check("Insert fill", (my2 == real2));
 	my2.insert(my2.end(), (size_t)3, 42);
 	real2.insert(real2.end(), (size_t)3, 42);
 	check("Insert fill", (my2 == real2));
