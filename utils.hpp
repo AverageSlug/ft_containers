@@ -124,8 +124,8 @@ namespace ft
 
 			/*MEMBER FUNCTIONS*/
 			pair() :
-				first(),
-				second()
+				first(0),
+				second(0)
 			{}
 
 			template<class U, class V>			pair(const pair<U,V>& pr) :
@@ -244,7 +244,7 @@ namespace ft
 		public:
 			/*MEMBER FUNCTIONS*/
 			vector_iterator() :
-				_it(nullptr)
+				_it(NULL)
 			{}
 
 			vector_iterator(pointer it) :
@@ -433,7 +433,7 @@ namespace ft
 		public:
 			/*MEMBER FUNCTIONS*/
 			map_iterator() :
-				_it(nullptr)
+				_it(NULL)
 			{}
 
 			map_iterator(pointer it) :
@@ -526,7 +526,7 @@ namespace ft
 		public:
 			/*MEMBER FUNCTIONS*/
 			reverse_iterator() :
-				_it(nullptr)
+				_it(NULL)
 			{}
 
 			explicit												reverse_iterator(iterator_type it) :

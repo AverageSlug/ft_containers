@@ -70,8 +70,8 @@ namespace ft
 
 			vector(const vector& x) :
 				_allocator(x.get_allocator()),
-				_begin(nullptr),
-				_end(nullptr),
+				_begin(NULL),
+				_end(NULL),
 				_capacity(0)
 			{
 				*this = x;
@@ -120,23 +120,30 @@ namespace ft
 
 			reverse_iterator						rbegin()
 			{
-				return (reverse_iterator(end()));
+				if (empty())
+					return (reverse_iterator());
+				return (reverse_iterator(end() - 1));
 			}
 
 			const_reverse_iterator					rbegin() const
 			{
-				return (const_reverse_iterator(end()));
+				if (empty())
+					return (const_reverse_iterator());
+				return (const_reverse_iterator(end() - 1));
 			}
 
 			reverse_iterator						rend()
 			{
-
-				return (reverse_iterator(begin()));
+				if (empty())
+					return (reverse_iterator());
+				return (reverse_iterator(begin() - 1));
 			}
 
 			const_reverse_iterator					rend() const
 			{
-				return (const_reverse_iterator(begin()));
+				if (empty())
+					return (const_reverse_iterator());
+				return (const_reverse_iterator(begin() - 1));
 			}
 
 			/*capacity*/
@@ -282,7 +289,7 @@ namespace ft
 				size_type	p = &(*position) - _begin;
 				if (_capacity >= size() + 1)
 				{
-					for (size_type i = 0; i < p; i++)
+					for (size_type i = 0; i < size() - p; i++)
 						_allocator.construct(_end - i, *(_end - i - 1));
 					_end++;
 					_allocator.construct(&(*position), val);
@@ -316,7 +323,7 @@ namespace ft
 			{
 				while (n > 0)
 				{
-					insert(position, val);
+					position = insert(position, val);
 					n--;
 				}
 			}
@@ -324,7 +331,7 @@ namespace ft
 			template <class InputIterator> void		insert(iterator position, InputIterator first, InputIterator last)
 			{
 				while (first != last)
-					insert(position++, *first++);
+					position = insert(position, *first++) + 1;
 			}
 
 			iterator								erase(iterator position)
@@ -367,38 +374,38 @@ namespace ft
 			}
 	};
 	/*NON-MEMBER FUNCTION OVERLOADS*/
-	template<class T, class Alloc> bool				operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	template<class T, class Alloc> bool				operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
 	{
 		if (lhs.size() != rhs.size())
 			return (false);
 		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 
-	template<class T, class Alloc> bool				operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	template<class T, class Alloc> bool				operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
 	{
 		return (!(lhs == rhs));
 	}
-	template<class T, class Alloc> bool				operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	template<class T, class Alloc> bool				operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
 	{
 		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	}
 
-	template<class T, class Alloc> bool				operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	template<class T, class Alloc> bool				operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
 	{
 		return (!(rhs < lhs));
 	}
 
-	template<class T, class Alloc> bool				operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	template<class T, class Alloc> bool				operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
 	{
 		return (rhs < lhs);
 	}
 
-	template<class T, class Alloc> bool				operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	template<class T, class Alloc> bool				operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
 	{
 		return (!(lhs < rhs));
 	}
 
-	template<class T, class Alloc> void				swap(vector<T,Alloc>& x, vector<T,Alloc>& y)
+	template<class T, class Alloc> void				swap(vector<T, Alloc>& x, vector<T, Alloc>& y)
 	{
 		x.swap(y);
 	}

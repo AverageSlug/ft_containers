@@ -25,8 +25,8 @@
 # include <utility>
 
 # include "../vector.hpp"
-//# include "../map.hpp"
-//# include "../stack.hpp"
+# include "../map.hpp"
+# include "../stack.hpp"
 # include "../utils.hpp"
 
 # define RESET "\e[0m"
@@ -105,39 +105,39 @@ bool operator==(ft::vector<T> &a, std::vector<T> &b)
 	return (true);
 };
 
-// template <typename T>
-// bool operator==(ft::stack<T> &a, std::stack<T> &b)
-// {
-// 	if (a.size() != b.size())
-// 		return (false);
-// 	if (a.empty() != b.empty())
-// 		return (false);
-// 	if (!a.empty())
-// 	{
-// 		if (a.top() != b.top())
-// 			return (false);
-// 	}
-// 	return (true);
-// };
+template <typename T>
+bool operator==(ft::stack<T> &a, std::stack<T> &b)
+{
+	if (a.size() != b.size())
+		return (false);
+	if (a.empty() != b.empty())
+		return (false);
+	if (!a.empty())
+	{
+		if (a.top() != b.top())
+			return (false);
+	}
+	return (true);
+};
 
-// template <typename T, typename S>
-// bool operator==(ft::map<T, S> &a, std::map<T, S> &b)
-// {
-// 	if (a.size() != b.size())
-// 		return (false);
-// 	if (a.empty() != b.empty())
-// 		return (false);
-// 	typename ft::map<T, S>::iterator it = a.begin();
-// 	typename std::map<T, S>::iterator it2 = b.begin();
-// 	while (it != a.end())
-// 	{
-// 		if (it->first != it2->first || it->second != it2->second)
-// 			return (false);
-// 		++it;
-// 		++it2;
-// 	}
-// 	return (true);
-// };
+template <typename T, typename S>
+bool operator==(ft::map<T, S> &a, std::map<T, S> &b)
+{
+	if (a.size() != b.size())
+		return (false);
+	if (a.empty() != b.empty())
+		return (false);
+	typename ft::map<T, S>::iterator it = a.begin();
+	typename std::map<T, S>::iterator it2 = b.begin();
+	while (it != a.end())
+	{
+		if (it->first != it2->first || it->second != it2->second)
+			return (false);
+		++it;
+		++it2;
+	}
+	return (true);
+};
 
 template <class T, class S>
 bool operator==(ft::pair<T, S> &a, std::pair<T, S> &b)
