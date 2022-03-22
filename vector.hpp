@@ -60,7 +60,9 @@ namespace ft
 				_capacity(0)
 			{
 				size_type	i;
-				for (i = 0; &(*last) - &(first[i]); i++);
+				InputIterator	f(first);
+				InputIterator	l(last);
+				for (i = 0; f++ != l; i++);
 				_begin = _allocator.allocate(i);
 				_end = _begin;
 				_capacity = i;

@@ -412,98 +412,6 @@ namespace ft
 		return (lhs.base() - rhs.base());
 	}
 
-	/**************************/
-	/* BIDIRECTIONAL ITERATOR */
-	/**************************/
-
-	template<typename T> class								map_iterator : public std::iterator<std::bidirectional_iterator_tag, T>
-	{
-		public:
-			/*MEMBER TYPES*/
-			typedef typename std::iterator<std::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
-			typedef typename std::iterator<std::bidirectional_iterator_tag, T>::value_type			value_type;
-			typedef typename std::iterator<std::bidirectional_iterator_tag, T>::difference_type		difference_type;
-			typedef T*																				pointer;
-			typedef T&																				reference;
-
-		private:
-			/*variables*/
-			pointer	_it;
-
-		public:
-			/*MEMBER FUNCTIONS*/
-			map_iterator() :
-				_it(NULL)
-			{}
-
-			map_iterator(pointer it) :
-				_it(it)
-			{}
-
-			map_iterator(const map_iterator& map_it) :
-				_it(map_it._it)
-			{}
-
-			map_iterator&					operator=(const map_iterator& map_it)
-			{
-				_it = map_it._it;
-				return (*this);
-			}
-
-			virtual ~map_iterator() {}
-
-			pointer							base() const
-			{
-				return (_it);
-			}
-
-			reference						operator*() const
-			{
-				return (*_it);
-			}
-
-			pointer							operator->()
-			{
-				return &(operator*());
-			}
-
-			map_iterator&					operator++()
-			{
-				_it++;
-				return (*this);
-			}
-
-			map_iterator					operator++(int)
-			{
-				map_iterator	t(*this);
-				operator++();
-				return (t);
-			}
-
-			map_iterator&					operator--()
-			{
-				_it--;
-				return (*this);
-			}
-
-			map_iterator 					operator--(int)
-			{
-				map_iterator	t(*this);
-				operator--();
-				return (t);
-			}
-	};
-	/*NON-MEMBER FUNCTION OVERLOADS*/
-	template<typename T> bool				operator==(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
-	{
-		return (lhs.base() == rhs.base());
-	}
-
-	template<typename T> bool				operator!=(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
-	{
-		return (lhs.base() != rhs.base());
-	}
-
 	/********************/
 	/* REVERSE ITERATOR */
 	/********************/
@@ -684,6 +592,126 @@ namespace ft
 	{
 		return (lhs.base() - rhs.base());
 	}
+
+	/******************************************************/
+	/*  _   _  ___  ___         _, _____ _   _ ____ ____  */
+	/*  |\ /| |   | |  |       |     |   |   | |    |     */
+	/*  | ' | |---| |--'       '-.   |   |   | |--  |--   */
+	/*  |   | |   | |          ,_|   |   |___| |    |     */
+	/******************************************************/
+
+	/**************************/
+	/* BIDIRECTIONAL ITERATOR */
+	/**************************/
+
+	template<typename T> class								map_iterator : public std::iterator<std::bidirectional_iterator_tag, T>
+	{
+		public:
+			/*MEMBER TYPES*/
+			typedef typename std::iterator<std::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
+			typedef typename std::iterator<std::bidirectional_iterator_tag, T>::value_type			value_type;
+			typedef typename std::iterator<std::bidirectional_iterator_tag, T>::difference_type		difference_type;
+			typedef T*																				pointer;
+			typedef T&																				reference;
+
+		private:
+			/*variables*/
+			pointer	_it;
+
+		public:
+			/*MEMBER FUNCTIONS*/
+			map_iterator() :
+				_it(NULL)
+			{}
+
+			map_iterator(pointer it) :
+				_it(it)
+			{}
+
+			map_iterator(const map_iterator& map_it) :
+				_it(map_it._it)
+			{}
+
+			map_iterator&					operator=(const map_iterator& map_it)
+			{
+				_it = map_it._it;
+				return (*this);
+			}
+
+			virtual ~map_iterator() {}
+
+			pointer							base() const
+			{
+				return (_it);
+			}
+
+			reference						operator*() const
+			{
+				return (*_it);
+			}
+
+			pointer							operator->()
+			{
+				return &(operator*());
+			}
+
+			map_iterator&					operator++()
+			{
+				_it++;
+				return (*this);
+			}
+
+			map_iterator					operator++(int)
+			{
+				map_iterator	t(*this);
+				operator++();
+				return (t);
+			}
+
+			map_iterator&					operator--()
+			{
+				_it--;
+				return (*this);
+			}
+
+			map_iterator 					operator--(int)
+			{
+				map_iterator	t(*this);
+				operator--();
+				return (t);
+			}
+	};
+	/*NON-MEMBER FUNCTION OVERLOADS*/
+	template<typename T> bool				operator==(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
+	{
+		return (lhs.base() == rhs.base());
+	}
+
+	template<typename T> bool				operator!=(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
+	{
+		return (lhs.base() != rhs.base());
+	}
+
+	/**********************/
+	/* BINARY SEARCH TREE */
+	/**********************/
+
+	typedef struct	_list
+	{
+		value_type		val;
+		struct _list*	left;
+		struct _list*	right;
+		_list() :
+			left(NULL),
+			right(NULL)
+		{}
+
+		_list(value_type v, struct _list* lft = NULL, struct _list* rit = NULL) :
+			val(v),
+			left(lft),
+			right(rit)
+		{}
+	}				t_list;
 }
 
 #endif

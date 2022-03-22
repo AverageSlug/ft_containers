@@ -15,7 +15,7 @@ namespace ft
 			typedef Container	container_type;
 			typedef	size_t		size_type;
 
-		private:
+		protected:
 			/*variables*/
 			container_type	_c;
 
