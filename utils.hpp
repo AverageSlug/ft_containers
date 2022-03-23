@@ -124,8 +124,8 @@ namespace ft
 
 			/*MEMBER FUNCTIONS*/
 			pair() :
-				first(0),
-				second(0)
+				first(),
+				second()
 			{}
 
 			template<class U, class V>			pair(const pair<U,V>& pr) :
@@ -146,39 +146,39 @@ namespace ft
 			}
 	};
 	/*NON-MEMBER FUNCTION OVERLOADS*/
-	template<class T1, class T2> bool			operator==(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	template<class T1, class T2> bool			operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
 		return (lhs.first == rhs.first && lhs.second == lhs.second);
 	}
 
-	template<class T1, class T2> bool			operator!=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	template<class T1, class T2> bool			operator!=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
 		return (!(lhs == rhs));
 	}
 
-	template<class T1, class T2> bool			operator<(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	template<class T1, class T2> bool			operator<(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
 		return (lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second));
 	}
 
-	template<class T1, class T2> bool			operator<=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	template<class T1, class T2> bool			operator<=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
 		return (!(rhs < lhs));
 	}
 
-	template<class T1, class T2> bool			operator>(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	template<class T1, class T2> bool			operator>(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
 		return (rhs < lhs);
 	}
 
-	template<class T1, class T2> bool			operator>=(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+	template<class T1, class T2> bool			operator>=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
 		return (!(lhs < rhs));
 	}
 
-	template<class T1, class T2> pair<T1,T2>	make_pair(T1 x, T2 y)
+	template<class T1, class T2> pair<T1, T2>	make_pair(T1 x, T2 y)
 	{
-		return (pair<T1,T2>(x, y));
+		return (pair<T1, T2>(x, y));
 	}
 
 	/******************************************************/
@@ -429,20 +429,20 @@ namespace ft
 
 		private:
 			/*variables*/
-			pointer	_it;
+			iterator_type	_it;
 
 		public:
 			/*MEMBER FUNCTIONS*/
 			reverse_iterator() :
-				_it(NULL)
+				_it()
 			{}
 
 			explicit												reverse_iterator(iterator_type it) :
-				_it(&(*it))
+				_it(it)
 			{}
 
 			template <class Iter>									reverse_iterator(const reverse_iterator<Iter>& rev_it) :
-				_it(&(rev_it.operator*()))
+				_it(rev_it.base())
 			{}
 
 			iterator_type											base() const
@@ -452,15 +452,13 @@ namespace ft
 
 			reference												operator*() const
 			{
-				return (*_it);
+				iterator_type	t(_it);
+				return (*(--t));
 			}
 
 			reverse_iterator										operator+(difference_type n) const
 			{
-				reverse_iterator	t(*this);
-				while (n--)
-					t--;
-				return (t);
+				return (reverse_iterator(_it - n));
 			}
 
 			reverse_iterator&										operator++()
@@ -483,10 +481,7 @@ namespace ft
 
 			reverse_iterator										operator-(difference_type n) const
 			{
-				reverse_iterator	t(*this);
-				while (n--)
-					t++;
-				return (t);
+				return (reverse_iterator(_it + n));
 			}
 
 			reverse_iterator&										operator--()
@@ -604,7 +599,7 @@ namespace ft
 	/* BIDIRECTIONAL ITERATOR */
 	/**************************/
 
-	template<typename T> class								map_iterator : public std::iterator<std::bidirectional_iterator_tag, T>
+	template<typename T, typename BST> class			map_iterator : public std::iterator<std::bidirectional_iterator_tag, T>
 	{
 		public:
 			/*MEMBER TYPES*/
@@ -613,28 +608,31 @@ namespace ft
 			typedef typename std::iterator<std::bidirectional_iterator_tag, T>::difference_type		difference_type;
 			typedef T*																				pointer;
 			typedef T&																				reference;
+			typedef BST*																			bst;
 
 		private:
 			/*variables*/
-			pointer	_it;
+			bst	_bst;
 
 		public:
 			/*MEMBER FUNCTIONS*/
 			map_iterator() :
-				_it(NULL)
+				_bst(NULL)
 			{}
 
-			map_iterator(pointer it) :
-				_it(it)
-			{}
+			map_iterator(bst b)
+			{
+				_bst = b;
+			}
 
-			map_iterator(const map_iterator& map_it) :
-				_it(map_it._it)
-			{}
+			map_iterator(const map_iterator& map_it)
+			{
+				*this = map_it;
+			}
 
 			map_iterator&					operator=(const map_iterator& map_it)
 			{
-				_it = map_it._it;
+				_bst = map_it._bst;
 				return (*this);
 			}
 
@@ -642,12 +640,12 @@ namespace ft
 
 			pointer							base() const
 			{
-				return (_it);
+				return (_bst);
 			}
 
 			reference						operator*() const
 			{
-				return (*_it);
+				return (_bst->val);
 			}
 
 			pointer							operator->()
@@ -657,7 +655,18 @@ namespace ft
 
 			map_iterator&					operator++()
 			{
-				_it++;
+				if (_bst->right)
+					_bst = smallest_leaf(_bst->right);
+				else if (_bst->parent)
+				{
+					bst	t = _bst;
+					_bst = _bst->parent;
+					while (_bst && t == _bst->right)
+					{
+						t = _bst;
+						_bst = _bst->parent;
+					}
+				}
 				return (*this);
 			}
 
@@ -670,7 +679,18 @@ namespace ft
 
 			map_iterator&					operator--()
 			{
-				_it--;
+				if (_bst->left)
+					_bst = largest_leaf(_bst->left);
+				else if (_bst->parent)
+				{
+					bst	t = _bst;
+					_bst = _bst->parent;
+					while (_bst && t == _bst->left)
+					{
+						t = _bst;
+						_bst = _bst->parent;
+					}
+				}
 				return (*this);
 			}
 
@@ -680,38 +700,60 @@ namespace ft
 				operator--();
 				return (t);
 			}
-	};
-	/*NON-MEMBER FUNCTION OVERLOADS*/
-	template<typename T> bool				operator==(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
-	{
-		return (lhs.base() == rhs.base());
-	}
 
-	template<typename T> bool				operator!=(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
-	{
-		return (lhs.base() != rhs.base());
-	}
+			operator map_iterator<const T, BST>() const
+			{
+				return map_iterator<const T, BST>(_bst);
+			}
+
+			template<typename X> bool						operator==(const ft::map_iterator<X, BST>& x)
+			{
+				return (_bst == x._bst);
+			}
+
+			template<typename X> bool						operator!=(const ft::map_iterator<X, BST>& x)
+			{
+				return (_bst != x._bst);
+			}
+	};
 
 	/**********************/
 	/* BINARY SEARCH TREE */
 	/**********************/
 
-	typedef struct	_list
+	template<typename T> struct		bst
 	{
-		value_type		val;
-		struct _list*	left;
-		struct _list*	right;
-		_list() :
+		T			val;
+		struct bst*	left;
+		struct bst*	right;
+		struct bst* parent;
+		bst() :
 			left(NULL),
-			right(NULL)
+			right(NULL),
+			parent(NULL)
 		{}
 
-		_list(value_type v, struct _list* lft = NULL, struct _list* rit = NULL) :
+		bst(T v, struct bst* lft = NULL, struct bst* rit = NULL) :
 			val(v),
 			left(lft),
-			right(rit)
+			right(rit),
+			parent(NULL)
 		{}
-	}				t_list;
+	};
+
+	template<typename T> bst<T>*	smallest_leaf(bst<T> *bst)
+	{
+		while (bst && bst->left)
+			bst = bst->left;
+		return bst;
+	}
+
+	template<typename T> bst<T>*	largest_leaf(bst<T> *bst)
+	{
+		while (bst && bst->right)
+			bst = bst->right;
+		return bst;
+	}
 }
 
 #endif

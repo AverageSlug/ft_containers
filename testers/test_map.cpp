@@ -53,13 +53,13 @@ void insert_map_values(ft::map<int, std::string> &m, std::map<int, std::string> 
   	ft::pair <int,std::string>			bar1;
 	ft::pair <int,std::string>			foo2;
   	ft::pair <int,std::string>			bar2;
-	
+
 	foo = ft::make_pair(2, "ca");
   	bar = ft::make_pair(8, "phrase");
 	foo1 = ft::make_pair(1, "Normalement");
   	bar1 = ft::make_pair(7, "une");
 	foo2 = ft::make_pair(6, "fait");
-  	bar2 = ft::make_pair(10, "correcte");	
+  	bar2 = ft::make_pair(10, "correcte");
 
 	m.insert(foo);
 	m.insert(bar);

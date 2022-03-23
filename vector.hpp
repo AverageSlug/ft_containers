@@ -122,30 +122,22 @@ namespace ft
 
 			reverse_iterator						rbegin()
 			{
-				if (empty())
-					return (reverse_iterator());
-				return (reverse_iterator(end() - 1));
+				return (reverse_iterator(end()));
 			}
 
 			const_reverse_iterator					rbegin() const
 			{
-				if (empty())
-					return (const_reverse_iterator());
-				return (const_reverse_iterator(end() - 1));
+				return (const_reverse_iterator(end()));
 			}
 
 			reverse_iterator						rend()
 			{
-				if (empty())
-					return (reverse_iterator());
-				return (reverse_iterator(begin() - 1));
+				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator					rend() const
 			{
-				if (empty())
-					return (const_reverse_iterator());
-				return (const_reverse_iterator(begin() - 1));
+				return (const_reverse_iterator(begin()));
 			}
 
 			/*capacity*/
@@ -340,12 +332,12 @@ namespace ft
 			{
 				iterator	p(position);
 				_allocator.destroy(&(*position));
-				while (position != end())
+				while (position + 1 != end())
 				{
 					_allocator.construct(&(*position), *(position + 1));
 					position++;
 				}
-				_allocator.destroy(&(*position));
+				_allocator.destroy(&(*(position)));
 				_end--;
 				return (p);
 			}
