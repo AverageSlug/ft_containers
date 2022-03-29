@@ -452,8 +452,7 @@ namespace ft
 
 			reference												operator*() const
 			{
-				iterator_type	t(_it);
-				return (*(--t));
+				return (*_it);
 			}
 
 			reverse_iterator										operator+(difference_type n) const
@@ -655,17 +654,19 @@ namespace ft
 
 			map_iterator&					operator++()
 			{
+				if (!_bst)
+					return (*this);
 				if (_bst->right)
 					_bst = smallest_leaf(_bst->right);
-				else if (_bst->parent)
+				else
 				{
-					bst	t = _bst;
-					_bst = _bst->parent;
-					while (_bst && t == _bst->right)
+					bst	t = _bst->parent;
+					while (t && _bst == t->right)
 					{
-						t = _bst;
-						_bst = _bst->parent;
+						_bst = t;
+						t = t->parent;
 					}
+					_bst = t;
 				}
 				return (*this);
 			}
@@ -679,17 +680,19 @@ namespace ft
 
 			map_iterator&					operator--()
 			{
+				if (!_bst)
+					return (*this);
 				if (_bst->left)
 					_bst = largest_leaf(_bst->left);
-				else if (_bst->parent)
+				else
 				{
-					bst	t = _bst;
-					_bst = _bst->parent;
-					while (_bst && t == _bst->left)
+					bst	t = _bst->parent;
+					while (t && _bst == t->left)
 					{
-						t = _bst;
-						_bst = _bst->parent;
+						_bst = t;
+						t = t->parent;
 					}
+					_bst = t;
 				}
 				return (*this);
 			}
@@ -733,26 +736,26 @@ namespace ft
 			parent(NULL)
 		{}
 
-		bst(T v, struct bst* lft = NULL, struct bst* rit = NULL) :
+		bst(T v, struct bst* lft = NULL, struct bst* rit = NULL, struct bst* par = NULL) :
 			val(v),
 			left(lft),
 			right(rit),
-			parent(NULL)
+			parent(par)
 		{}
 	};
 
 	template<typename T> bst<T>*	smallest_leaf(bst<T> *bst)
 	{
-		while (bst && bst->left)
-			bst = bst->left;
-		return bst;
+		if (!bst || !bst->left)
+			return bst;
+		return smallest_leaf(bst->left);
 	}
 
 	template<typename T> bst<T>*	largest_leaf(bst<T> *bst)
 	{
-		while (bst && bst->right)
-			bst = bst->right;
-		return bst;
+		if (!bst || !bst->right)
+			return bst;
+		return largest_leaf(bst->right);
 	}
 }
 
