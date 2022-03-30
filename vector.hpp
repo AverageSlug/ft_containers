@@ -22,8 +22,8 @@ namespace ft
 			typedef ft::vector_iterator<value_type const>		const_iterator;
 			typedef ft::reverse_iterator<iterator>				reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-			typedef ptrdiff_t									difference_type;
-			typedef size_t										size_type;
+			typedef typename allocator_type::difference_type	difference_type;
+			typedef typename allocator_type::size_type			size_type;
 
 		private:
 			/*variables*/
@@ -53,7 +53,7 @@ namespace ft
 					_allocator.construct(_end++, val);
 			}
 
-			template <class InputIterator>			vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) :
+			template <class InputIterator>			vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL) :
 				_allocator(alloc),
 				_begin(NULL),
 				_end(NULL),
@@ -122,22 +122,22 @@ namespace ft
 
 			reverse_iterator						rbegin()
 			{
-				return (reverse_iterator(--end()));
+				return (reverse_iterator(end()));
 			}
 
 			const_reverse_iterator					rbegin() const
 			{
-				return (const_reverse_iterator(--end()));
+				return (const_reverse_iterator(end()));
 			}
 
 			reverse_iterator						rend()
 			{
-				return (reverse_iterator(--begin()));
+				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator					rend() const
 			{
-				return (const_reverse_iterator(--begin()));
+				return (const_reverse_iterator(begin()));
 			}
 
 			/*capacity*/
@@ -244,12 +244,14 @@ namespace ft
 			}
 
 			/*modifiers*/
-			template <class InputIterator> void		assign(InputIterator first, InputIterator last)
+			template <class InputIterator> void		assign(InputIterator first, InputIterator last, typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 			{
 				clear();
 				_allocator.deallocate(_begin, _capacity);
 				size_type	i;
-				for (i = 0; &(*last) - &first[i] > 0; i++);
+				InputIterator	f(first);
+				InputIterator	l(last);
+				for (i = 0; f++ != l; i++);
 				_begin = _allocator.allocate(i);
 				_end = _begin;
 				_capacity = i;
@@ -322,7 +324,7 @@ namespace ft
 				}
 			}
 
-			template <class InputIterator> void		insert(iterator position, InputIterator first, InputIterator last)
+			template <class InputIterator> void		insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 			{
 				while (first != last)
 					position = insert(position, *first++) + 1;
@@ -351,9 +353,20 @@ namespace ft
 
 			void									swap(vector& x)
 			{
-				vector<T>	tmp(x);
-				x = *this;
-				*this = tmp;
+				pointer			b = x._begin;
+				pointer			e = x._end;
+				size_t			c = x._capacity;
+				allocator_type	a = x._allocator;
+
+				x._begin = _begin;
+				x._end = _end;
+				x._capacity = _capacity;
+				x._allocator = _allocator;
+
+				_begin = b;
+				_end = e;
+				_capacity = c;
+				_allocator = a;
 			}
 
 			void									clear()
