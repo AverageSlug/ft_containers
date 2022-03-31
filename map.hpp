@@ -102,12 +102,15 @@ namespace ft
 						_bst_allocator.destroy(bst);
 						return (t);
 					}
-					bst_pointer	t = smallest_leaf(bst->right);
+					bst_pointer	t = largest_leaf(bst->left);
+					bst_pointer	p = NULL;
+					if (bst->parent)
+						p = bst->parent;
 					bst_pointer	l = bst->left;
 					bst_pointer	r = bst->right;
 					_bst_allocator.destroy(bst);
-					_bst_allocator.construct(bst, bst_type(t->val, l, r));
-					bst->right = _bst_erase(bst->right, t->val);
+					_bst_allocator.construct(bst, bst_type(t->val, l, r, p));
+					bst->left = _bst_erase(bst->left, t->val);
 				}
 				return (bst);
 			}
@@ -116,7 +119,6 @@ namespace ft
 			/*MEMBER FUNCTIONS*/
 			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
 				_allocator(alloc),
-				_bst_allocator(bst_allocator(_allocator)),
 				_size(0),
 				_root(NULL),
 				_comp(comp)
@@ -124,7 +126,6 @@ namespace ft
 
 			template<class InputIterator> map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
 				_allocator(alloc),
-				_bst_allocator(bst_allocator(_allocator)),
 				_size(0),
 				_root(NULL),
 				_comp(comp)
@@ -134,7 +135,6 @@ namespace ft
 
 			map(const map& x) :
 				_allocator(x._allocator),
-				_bst_allocator(x._bst_allocator),
 				_size(x._size),
 				_root(x._root),
 				_comp(x._comp)
@@ -179,22 +179,22 @@ namespace ft
 
 			reverse_iterator					rbegin()
 			{
-				return (reverse_iterator(iterator(largest_leaf(_root), _root, 1)));
+				return (reverse_iterator(end()));
 			}
 
 			const_reverse_iterator				rbegin() const
 			{
-				return (const_reverse_iterator(const_iterator(largest_leaf(_root), _root, 1)));
+				return (const_reverse_iterator(end()));
 			}
 
 			reverse_iterator					rend()
 			{
-				return (reverse_iterator(iterator(NULL, _root, 1)));
+				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator				rend() const
 			{
-				return (const_reverse_iterator(const_iterator(NULL, _root, 1)));
+				return (const_reverse_iterator(begin()));
 			}
 
 			/*capacity*/
