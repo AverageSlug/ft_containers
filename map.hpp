@@ -40,7 +40,7 @@ namespace ft
 			typedef ft::map_iterator<const value_type, bst_type>				const_iterator;
 			typedef ft::reverse_iterator<iterator>							reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
-			typedef ptrdiff_t										difference_type;
+			typedef typename allocator_type::difference_type		difference_type;
 			typedef size_t										size_type;
 
 		private:
@@ -212,7 +212,7 @@ namespace ft
 
 			size_type							max_size() const
 			{
-				return _bst_allocator.max_size();
+				return (std::numeric_limits<difference_type>::max() / (sizeof(ft::bst<mapped_type>) - ((((sizeof(ft::bst<mapped_type>) + 8) / 16) + 1) * 4)));
 			}
 
 			/*element access*/

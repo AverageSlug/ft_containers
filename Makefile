@@ -2,9 +2,9 @@ NAME		=	ft_containers
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 
-SRCS		=	$(wildcard *.cpp Containers/current_cont/testers/*.cpp)
+SRCS		=	$(wildcard *.cpp testers/*.cpp)
 
 OBJS		=	$(SRCS:.cpp=.o)
 

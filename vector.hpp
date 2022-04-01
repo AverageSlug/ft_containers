@@ -87,11 +87,8 @@ namespace ft
 
 			vector&									operator=(const vector& x)
 			{
-				_begin = _allocator.allocate(x.size());
-				_capacity = x.capacity();
-				_end = _begin;
-				for (size_type i = 0; i < x.size(); i++)
-					_allocator.construct(_end++, x[i]);
+				clear();
+				insert(end(), x.begin(), x.end());
 				return (*this);
 			}
 
